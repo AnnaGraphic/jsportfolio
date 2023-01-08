@@ -15,8 +15,8 @@ const contentTypes = {
 
 // +++++ CREATE SERVER +++++
 http.createServer((req, res) => {
+const projectsRoot = path.join(__dirname, "projects");
 
-// ----- filepath -----
 const reqPath = path.join(__dirname, "projects", req.url);
 
     if (req.method !== "GET") {
@@ -26,20 +26,31 @@ const reqPath = path.join(__dirname, "projects", req.url);
     }
 
     if (req.url == ('/')) {
+       const subFolder = fs.readdirSync(projectsRoot);
 
         res.setHeader("Content-Type", "text/html");
         res.write( `<!doctype html>
         <html>
         <title>Portfolio</title>
-        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="assets/styles.css" />
+        <body>
         <h1>Portfolio</h1>
-        </html>`);
+        `);
+        for (let i = 0; i < subFolder.length; i++) {
+            console.log("subfolder ", subFolder)
+            if (subFolder[i] !== 'assets'){
+                console.log("in the for loop")
+            res.write(`<a href="${subFolder[i]}">${subFolder[i]}<a/><br>`);
+            }
+        }
+        res.write("</body>");
+        res.write("</html>");
         res.statusCode = 200;
         res.end();
         return;
     }
 
-if (fs.existsSync(reqPath)) {
+if (fs.existsSync(reqPath)) { 
     if (fs.statSync(reqPath).isDirectory()) {
         if (req.url.endsWith('/')) {
             const indexHTMLPath = payh.join(reqPath, 'index.html');
@@ -74,5 +85,5 @@ if (fs.existsSync(reqPath)) {
 
     console.log("req url: ", req.url);
     console.log("reqPath:  ", reqPath);
-    
+
 }).listen(PORT, () => console.log(`Listening on port: ${PORT}`))
