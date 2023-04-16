@@ -53,7 +53,7 @@ const reqPath = path.join(__dirname, "projects", req.url);
 if (fs.existsSync(reqPath)) { 
     if (fs.statSync(reqPath).isDirectory()) {
         if (req.url.endsWith('/')) {
-            const indexHTMLPath = payh.join(reqPath, 'index.html');
+            const indexHTMLPath = path.join(reqPath, 'index.html');
             if (fs.existsSync(indexHTMLPath) && fs.statSync(indexHTMLPath).isFile())
             {
                 const readStream = fs.createReadStream(indexHTMLPath);
@@ -84,6 +84,6 @@ if (fs.existsSync(reqPath)) {
 }
 
     console.log("req url: ", req.url);
-    console.log("reqPath:  ", reqPath);
+    console.log("reqPath: ", reqPath);
 
 }).listen(PORT, () => console.log(`Listening on port: ${PORT}`))
